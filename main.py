@@ -112,10 +112,10 @@ def programa_principal():
         elif opcion == "7":
             print("\nFuncionalidad: Estadísticas globales.")
             
-        elif opcion == "8":
-            guardar_datos(archivo_datos, paises)
-            print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
-            break
+        # elif opcion == "8":
+        #     guardar_datos(archivo_datos, paises)
+        #     print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
+        #     break
         else:
             print("\nOpción inválida. Por favor, ingresá un número del 1 al 8.")
 
