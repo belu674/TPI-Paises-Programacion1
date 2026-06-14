@@ -15,17 +15,17 @@ print("Archivo 'paises.csv' creado con éxito.")
 # =====================================================================
 # BLOQUE 1.2: GUARDAR DATOS EN ARCHIVO CSV
 # =====================================================================
-def guardar_datos(archivo, lista_paises):
-    try:
-        #Abrimos con 'w' (write) para reescribir el archivo con todo lo nuevo
-        with open(archivo, "w", encoding="utf-8") as f:
-            for pais in lista_paises:
-                #Armamos la línea pegando los datos separados por coma. Convertimos los números a str() para poder unirlos
-                linea = f"{pais['nombre']},{pais['continente']},{pais['poblacion']},{pais['superficie']},{pais['pbi']}\n"
-                f.write(linea)
-        print("\nArchivo CSV actualizado correctamente.")
-    except Exception as e:
-        print(f"\nNo se pudo guardar en el archivo: {e}")
+# def guardar_datos(archivo, lista_paises):
+#     try:
+#         #Abrimos con 'w' (write) para reescribir el archivo con todo lo nuevo
+#         with open(archivo, "w", encoding="utf-8") as f:
+#             for pais in lista_paises:
+#                 #Armamos la línea pegando los datos separados por coma. Convertimos los números a str() para poder unirlos
+#                 linea = f"{pais['nombre']},{pais['continente']},{pais['poblacion']},{pais['superficie']},{pais['pbi']}\n"
+#                 f.write(linea)
+#         print("\nArchivo CSV actualizado correctamente.")
+#     except Exception as e:
+#         print(f"\nNo se pudo guardar en el archivo: {e}")
 
 # =====================================================================
 # BLOQUE 2: FUNCIÓN PARA CARGAR LOS DATOS
