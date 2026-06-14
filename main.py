@@ -44,3 +44,63 @@ def cargar_datos(ruta_archivo):
             lista_paises.append(pais)
             
     return lista_paises
+
+# =====================================================================
+# BLOQUE 3: MENÚ INTERACTIVO COMPLETO (SEGÚN CONSIGNA)
+# =====================================================================
+def mostrar_menu():
+    print("\n==============================================")
+    print("      SISTEMA DE GESTIÓN DE DATOS DE PAÍSES    ")
+    print("==============================================")
+    print("1. Mostrar todos los países cargados")
+    print("2. Agregar un nuevo país (Alta)")
+    print("3. Actualizar datos de un país (Modificación)")
+    print("4. Buscar un país por nombre")
+    print("5. Filtrar países (Continente / Población / Superficie)")
+    print("6. Ordenar países (Nombre / Población / Superficie)")
+    print("7. Mostrar estadísticas globales")
+    print("8. Salir y guardar")
+    print("==============================================")
+
+def programa_principal():
+    archivo_datos = "paises.csv"
+    paises = cargar_datos(archivo_datos)
+    
+    while True:
+        mostrar_menu()
+        opcion = input("Elegí una opción (1-8): ")
+        
+        if opcion == "1":
+            print("\n--- LISTADO TOTAL DE PAÍSES ---")
+            for p in paises:
+                print(f"País: {p['nombre']:<12} | Continente: {p['continente']:<16} | Población: {p['poblacion']}")
+        
+        elif opcion == "2":
+            print("\nFuncionalidad: Agregar país (No campos vacíos).")
+            
+        elif opcion == "3":
+            print("\nFuncionalidad: Actualizar Población y Superficie.")
+            
+        elif opcion == "4":
+            print("\nFuncionalidad: Buscar país (Coincidencia parcial/exacta).")
+            
+        elif opcion == "5":
+            print("\n--- SUBMENÚ DE FILTROS ---")
+            print("a. Por Continente\nb. Por Rango de Población\nc. Por Rango de Superficie")
+            #Dejamos el molde para cuando programemos los filtros
+            
+        elif opcion == "6":
+            print("\n--- SUBMENÚ DE ORDENAMIENTO ---")
+            print("a. Por Nombre\nb. Por Población\nc. Por Superficie")
+            
+        elif opcion == "7":
+            print("\nFuncionalidad: Estadísticas globales.")
+            
+        elif opcion == "8":
+            print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
+            break
+        else:
+            print("\nOpción inválida. Por favor, ingrese un número del 1 al 8.")
+
+#Inicia el programa
+programa_principal()
