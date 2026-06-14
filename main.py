@@ -13,6 +13,21 @@ with open("paises.csv", "w", encoding="utf-8") as archivo_inicial:
 print("Archivo 'paises.csv' creado con éxito.")
 
 # =====================================================================
+# BLOQUE 1.2: GUARDAR DATOS EN ARCHIVO CSV
+# =====================================================================
+def guardar_datos(archivo, lista_paises):
+    try:
+        #Abrimos con 'w' (write) para reescribir el archivo con todo lo nuevo
+        with open(archivo, "w", encoding="utf-8") as f:
+            for pais in lista_paises:
+                #Armamos la línea pegando los datos separados por coma. Convertimos los números a str() para poder unirlos
+                linea = f"{pais['nombre']},{pais['continente']},{pais['poblacion']},{pais['superficie']},{pais['pbi']}\n"
+                f.write(linea)
+        print("\nArchivo CSV actualizado correctamente.")
+    except Exception as e:
+        print(f"\nNo se pudo guardar en el archivo: {e}")
+
+# =====================================================================
 # BLOQUE 2: FUNCIÓN PARA CARGAR LOS DATOS
 # =====================================================================
 def cargar_datos(ruta_archivo):
@@ -46,7 +61,7 @@ def cargar_datos(ruta_archivo):
     return lista_paises
 
 # =====================================================================
-# BLOQUE 3: MENÚ INTERACTIVO COMPLETO (SEGÚN CONSIGNA)
+# BLOQUE 3: MENÚ
 # =====================================================================
 def mostrar_menu():
     print("\n==============================================")
@@ -76,19 +91,20 @@ def programa_principal():
                 print(f"País: {p['nombre']:<12} | Continente: {p['continente']:<16} | Población: {p['poblacion']}")
         
         elif opcion == "2":
-            print("\nFuncionalidad: Agregar país (No campos vacíos).")
+            #Llamamos a la función de alta pasándole nuestra lista de países
+            agregar_pais(paises)
             
         elif opcion == "3":
-            print("\nFuncionalidad: Actualizar Población y Superficie.")
+            #Llamamos a la función de modificación pasándole la lista
+            actualizar_pais(paises)
             
         elif opcion == "4":
-            print("\nFuncionalidad: Buscar país (Coincidencia parcial/exacta).")
+            #Llamamos a la función de búsqueda pasándole el dataset
+            buscar_pais_por_nombre(paises)
             
         elif opcion == "5":
-            print("\n--- SUBMENÚ DE FILTROS ---")
-            print("a. Por Continente\nb. Por Rango de Población\nc. Por Rango de Superficie")
-            #Dejamos el molde para cuando programemos los filtros
-            
+            #Llamamos a la función encargada de gestionar los filtros
+            ejecutar_submenu_filtros(paises)
         elif opcion == "6":
             print("\n--- SUBMENÚ DE ORDENAMIENTO ---")
             print("a. Por Nombre\nb. Por Población\nc. Por Superficie")
@@ -97,10 +113,223 @@ def programa_principal():
             print("\nFuncionalidad: Estadísticas globales.")
             
         elif opcion == "8":
+            guardar_datos(archivo_datos, paises)
             print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
             break
         else:
-            print("\nOpción inválida. Por favor, ingrese un número del 1 al 8.")
+            print("\nOpción inválida. Por favor, ingresá un número del 1 al 8.")
+
+# =====================================================================
+# BLOQUE 5: FUNCIÓN PARA AGREGAR UN PAÍS (ALTA)
+# =====================================================================
+def agregar_pais(lista_paises):
+    print("\n--- REGISTRAR NUEVO PAÍS ---")
+    
+    #Validamos que el nombre no sea vacío
+    nombre = input("Ingresá el nombre del país: ").strip()
+    while nombre == "":
+        print("El nombre no puede estar vacío.")
+        nombre = input("Ingresá el nombre del país: ").strip()
+        
+    #Validamos que el continente no sea vacío
+    continente = input("Ingresá el continente: ").strip()
+    while continente == "":
+        print("El continente no puede estar vacío.")
+        continente = input("Ingresá el continente: ").strip()
+
+    #Validamos que la población sea un número entero mayor a 0 y no vacío
+    while True:
+        poblacion_str = input("Ingresá la población (solo números): ").strip()
+        if poblacion_str.isdigit() and int(poblacion_str) > 0:
+            poblacion = int(poblacion_str)
+            break
+        print("Ingreso inválido. Debe ser un número entero mayor a 0.")
+
+    #Validamos que la superficie sea un número entero mayor a 0 y no vacío
+    while True:
+        superficie_str = input("Ingresá la superficie en km² (solo números): ").strip()
+        if superficie_str.isdigit() and int(superficie_str) > 0:
+            superficie = int(superficie_str)
+            break
+        print("Ingreso inválido. Debe ser un número entero mayor a 0.")
+
+    #Validamos que el PBI sea un número entero mayor a 0 y no vacío
+    while True:
+        pbi_str = input("Ingresá el PBI en millones (solo números): ").strip()
+        if pbi_str.isdigit() and int(pbi_str) > 0:
+            pbi = int(pbi_str)
+            break
+        print("Ingreso inválido. Debe ser un número entero mayor a 0.")
+
+    #Creamos el nuevo diccionario del país con los datos limpios
+    nuevo_pais = {
+        "nombre": nombre,
+        "continente": continente,
+        "poblacion": poblacion,
+        "superficie": superficie,
+        "pbi": pbi
+    }
+    
+    #Lo agregamos a nuestra lista
+    lista_paises.append(nuevo_pais)
+    print(f"\n{nombre} se agregó correctamente a la lista.")
+
+# =====================================================================
+# BLOQUE 6: FUNCIÓN PARA ACTUALIZAR DATOS
+# =====================================================================
+def actualizar_pais(lista_paises):
+    print("\n--- ACTUALIZAR DATOS DE UN PAÍS ---")
+    
+    nombre_buscar = input("Ingresá el nombre del país que querés modificar: ").strip()
+    while nombre_buscar == "":
+        print("El nombre a buscar no puede estar vacío.")
+        nombre_buscar = input("Ingresá el nombre del país: ").strip()
+        
+    #Variable "bandera" para saber si encontramos o no el país
+    encontrado = False
+    
+    # Recorremos la lista buscando coincidencia exacta (sin importar mayúsculas)
+    for pais in lista_paises:
+        if pais["nombre"].lower() == nombre_buscar.lower():
+            encontrado = True
+            print(f"\nPaís encontrado: {pais['nombre']} ({pais['continente']})")
+            print(f"Valores actuales -> Población: {pais['poblacion']} | Superficie: {pais['superficie']} km²")
+            print("-" * 50)
+            
+            #Validamos la nueva Población
+            while True:
+                nueva_pob_str = input("Ingresá la NUEVA población (solo números): ").strip()
+                if nueva_pob_str.isdigit() and int(nueva_pob_str) > 0:
+                    pais["poblacion"] = int(nueva_pob_str)
+                    break
+                print("Ingreso inválido. Debe ser un número entero mayor a 0.")
+                
+            #Validamos la nueva Superficie
+            while True:
+                nueva_sup_str = input("Ingresá la NUEVA superficie en km² (solo números): ").strip()
+                if nueva_sup_str.isdigit() and int(nueva_sup_str) > 0:
+                    pais["superficie"] = int(nueva_sup_str)
+                    break
+                print("Ingreso inválido. Debe ser un número entero mayor a 0.")
+                
+            print(f"\nLos datos de {pais['nombre']} fueron actualizados correctamente.")
+            break  #Cortamos el bucle porque ya lo encontramos y modificamos
+            
+    if not encontrado:
+        print(f"\nNo se encontró ningún país con el nombre '{nombre_buscar}' en el sistema.")
+
+# =====================================================================
+# BLOQUE 7: FUNCIÓN DE BÚSQUEDA (COINCIDENCIA PARCIAL O EXACTA)
+# =====================================================================
+def buscar_pais_por_nombre(lista_paises):
+    print("\n--- BUSCAR PAÍS POR NOMBRE ---")
+    
+    busqueda = input("Ingresá el nombre (o parte del nombre) a buscar: ").strip()
+    while busqueda == "":
+        print("El campo de búsqueda no puede estar vacío.")
+        busqueda = input("Ingresá el nombre a buscar: ").strip()
+        
+    #Lista para ir guardando todas las coincidencias que encontremos
+    resultados = []
+    
+    #Recorremos el dataset entero
+    for pais in lista_paises:
+        #El operador 'in' nos va a permitir validar la coincidencia parcial
+        if busqueda.lower() in pais["nombre"].lower():
+            resultados.append(pais)
+            
+    #Mostramos los resultados obtenidos
+    if len(resultados) > 0:
+        print(f"\nSe encontraron {len(resultados)} coincidencia(s):")
+        print("-" * 60)
+        for r in resultados:
+            print(f"-> {r['nombre']:<12} | Continente: {r['continente']:<16} | Población: {r['poblacion']}")
+        print("-" * 60)
+    else:
+        print(f"\nNo se encontraron países que coincidan con '{busqueda}'.")
+
+# =====================================================================
+# FUNCIONES AUXILIARES DE FILTRADO
+# =====================================================================
+def filtrar_por_continente(lista_paises, continente_buscado):
+    paises_filtrados = []
+    for pais in lista_paises:
+        if pais["continente"].lower() == continente_buscado.lower():
+            paises_filtrados.append(pais)
+    return paises_filtrados
+
+def filtrar_por_rango_poblacion(lista_paises, minimo, maximo):
+    resultados = []
+    for pais in lista_paises:
+        #Verificamos si la población está dentro del rango
+        if minimo <= pais["poblacion"] <= maximo:
+            resultados.append(pais)
+    return resultados
+
+def filtrar_por_rango_superficie(lista_paises, minimo, maximo):
+    resultados = []
+    for pais in lista_paises:
+        #Verificamos si la superficie está dentro del rango
+        if minimo <= pais["superficie"] <= maximo:
+            resultados.append(pais)
+    return resultados
+
+# =====================================================================
+# BLOQUE 5: SUBMENÚ DE FILTROS
+# =====================================================================
+def ejecutar_submenu_filtros(paises):
+    print("\n--- SUBMENÚ DE FILTROS ---")
+    print("a. Filtrar por Continente")
+    print("b. Filtrar por Rango de Población")
+    print("c. Filtrar por Rango de Superficie")
+    sub_opcion = input("Elegí una opción de filtrado (a, b o c): ").strip().lower()
+    
+    if sub_opcion == "a":
+        continente = input("Ingresá el nombre del continente: ").strip()
+        if continente != "":
+            resultados = filtrar_por_continente(paises, continente)
+            if len(resultados) > 0:
+                print(f"\nPaíses en {continente}:")
+                for p in resultados:
+                    print(f"-> {p['nombre']} (Población: {p['poblacion']})")
+            else:
+                print(f"\nNo se encontraron países en '{continente}'.")
+        else:
+            print("El continente no puede estar vacío.")
+            
+    elif sub_opcion == "b":
+        print("\n-- Rango de Población --")
+        min_pob = input("Ingresá la población MÍNIMA: ").strip()
+        max_pob = input("Ingresá la población MÁXIMA: ").strip()
+        
+        if min_pob.isdigit() and max_pob.isdigit():
+            resultados = filtrar_por_rango_poblacion(paises, int(min_pob), int(max_pob))
+            if len(resultados) > 0:
+                print(f"\nPaíses dentro del rango de población ({min_pob} - {max_pob}):")
+                for p in resultados:
+                    print(f"-> {p['nombre']} (Población: {p['poblacion']})")
+            else:
+                print("\nNo hay países en ese rango de población.")
+        else:
+            print("Los valores deben ser números enteros.")
+            
+    elif sub_opcion == "c":
+        print("\n-- Rango de Superficie --")
+        min_sup = input("Ingresá la superficie MÍNIMA (km²): ").strip()
+        max_sup = input("Ingresá la superficie MÁXIMA (km²): ").strip()
+        
+        if min_sup.isdigit() and max_sup.isdigit():
+            resultados = filtrar_por_rango_superficie(paises, int(min_sup), int(max_sup))
+            if len(resultados) > 0:
+                print(f"\nPaíses dentro del rango de superficie ({min_sup}km² - {max_sup}km²):")
+                for p in resultados:
+                    print(f"-> {p['nombre']} (Superficie: {p['superficie']} km²)")
+            else:
+                print("\nNo hay países en ese rango de superficie.")
+        else:
+            print("Los valores deben ser números enteros.")
+    else:
+        print("Opción de submenú inválida.")
 
 #Inicia el programa
 programa_principal()
