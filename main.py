@@ -2,30 +2,31 @@
 # BLOQUE 1: CREACIÓN DEL ARCHIVO
 # =====================================================================
 # Usamos modo 'w' para crear el archivo desde cero con los encabezados y algunos países de ejemplo.
-with open("paises.csv", "w", encoding="utf-8") as archivo_inicial:
-    archivo_inicial.write("nombre,continente,poblacion,superficie,pbi\n")
-    archivo_inicial.write("Argentina,América del Sur,46000000,2780400,490000\n")
-    archivo_inicial.write("Brasil,América del Sur,214000000,8515767,1600000\n")
-    archivo_inicial.write("España,Europa,47000000,505990,1400000\n")
-    archivo_inicial.write("Japón,Asia,125000000,377975,4900000\n")
-    archivo_inicial.write("Egipto,África,109000000,1002450,400000\n")
+# with open("paises.csv", "w", encoding="utf-8") as archivo_inicial:
+#     archivo_inicial.write("nombre,continente,poblacion,superficie,pbi\n")
+#     archivo_inicial.write("Argentina,América del Sur,46000000,2780400,490000\n")
+#     archivo_inicial.write("Brasil,América del Sur,214000000,8515767,1600000\n")
+#     archivo_inicial.write("España,Europa,47000000,505990,1400000\n")
+#     archivo_inicial.write("Japón,Asia,125000000,377975,4900000\n")
+#     archivo_inicial.write("Egipto,África,109000000,1002450,400000\n")
 
-print("Archivo 'paises.csv' creado con éxito.")
+# print("Archivo 'paises.csv' creado con éxito.")
 
+#Al haberse creado una vez, no hace falta volver a crear el archivo.
 # =====================================================================
 # BLOQUE 1.2: GUARDAR DATOS EN ARCHIVO CSV
 # =====================================================================
-# def guardar_datos(archivo, lista_paises):
-#     try:
-#         #Abrimos con 'w' (write) para reescribir el archivo con todo lo nuevo
-#         with open(archivo, "w", encoding="utf-8") as f:
-#             for pais in lista_paises:
-#                 #Armamos la línea pegando los datos separados por coma. Convertimos los números a str() para poder unirlos
-#                 linea = f"{pais['nombre']},{pais['continente']},{pais['poblacion']},{pais['superficie']},{pais['pbi']}\n"
-#                 f.write(linea)
-#         print("\nArchivo CSV actualizado correctamente.")
-#     except Exception as e:
-#         print(f"\nNo se pudo guardar en el archivo: {e}")
+def guardar_datos(archivo, lista_paises):
+    try:
+        #Abrimos con 'w' (write) para reescribir el archivo con todo lo nuevo
+        with open(archivo, "w", encoding="utf-8") as f:
+            for pais in lista_paises:
+                #Armamos la línea pegando los datos separados por coma. Convertimos los números a str() para poder unirlos
+                linea = f"{pais['nombre']},{pais['continente']},{pais['poblacion']},{pais['superficie']},{pais['pbi']}\n"
+                f.write(linea)
+        print("\nArchivo CSV actualizado correctamente.")
+    except Exception as e:
+        print(f"\nNo se pudo guardar en el archivo: {e}")
 
 # =====================================================================
 # BLOQUE 2: FUNCIÓN PARA CARGAR LOS DATOS
@@ -113,10 +114,10 @@ def programa_principal():
         elif opcion == "7":
             mostrar_estadisticas(paises)
             
-        # elif opcion == "8":
-        #     guardar_datos(archivo_datos, paises)
-        #     print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
-        #     break
+        elif opcion == "8":
+            guardar_datos(archivo_datos, paises)
+            print("\nSe guardaron los cambios con éxito. Se finaliza el programa.")
+            break
         else:
             print("\nOpción inválida. Por favor, ingresá un número del 1 al 8.")
 
