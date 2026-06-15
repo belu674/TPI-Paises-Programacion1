@@ -2,16 +2,17 @@
 # BLOQUE 1: CREACIÓN DEL ARCHIVO
 # =====================================================================
 # Usamos modo 'w' para crear el archivo desde cero con los encabezados y algunos países de ejemplo.
-with open("paises.csv", "w", encoding="utf-8") as archivo_inicial:
-    archivo_inicial.write("nombre,continente,poblacion,superficie,pbi\n")
-    archivo_inicial.write("Argentina,América del Sur,46000000,2780400,490000\n")
-    archivo_inicial.write("Brasil,América del Sur,214000000,8515767,1600000\n")
-    archivo_inicial.write("España,Europa,47000000,505990,1400000\n")
-    archivo_inicial.write("Japón,Asia,125000000,377975,4900000\n")
-    archivo_inicial.write("Egipto,África,109000000,1002450,400000\n")
+# with open("paises.csv", "w", encoding="utf-8") as archivo_inicial:
+#     archivo_inicial.write("nombre,continente,poblacion,superficie,pbi\n")
+#     archivo_inicial.write("Argentina,América del Sur,46000000,2780400,490000\n")
+#     archivo_inicial.write("Brasil,América del Sur,214000000,8515767,1600000\n")
+#     archivo_inicial.write("España,Europa,47000000,505990,1400000\n")
+#     archivo_inicial.write("Japón,Asia,125000000,377975,4900000\n")
+#     archivo_inicial.write("Egipto,África,109000000,1002450,400000\n")
 
-print("Archivo 'paises.csv' creado con éxito.")
+# print("Archivo 'paises.csv' creado con éxito.")
 
+#Al haberse creado una vez, no hace falta volver a crear el archivo.
 # =====================================================================
 # BLOQUE 1.2: GUARDAR DATOS EN ARCHIVO CSV
 # =====================================================================
@@ -80,6 +81,7 @@ def mostrar_menu():
 def programa_principal():
     archivo_datos = "paises.csv"
     paises = cargar_datos(archivo_datos)
+    continentes=["América del Sur","Europa","Asia","África","Oceanía"]
     
     while True:
         mostrar_menu()
@@ -104,13 +106,13 @@ def programa_principal():
             
         elif opcion == "5":
             #Llamamos a la función encargada de gestionar los filtros
-            ejecutar_submenu_filtros(paises)
+            ejecutar_submenu_filtros(paises,continentes)
         elif opcion == "6":
-            print("\n--- SUBMENÚ DE ORDENAMIENTO ---")
-            print("a. Por Nombre\nb. Por Población\nc. Por Superficie")
+            ejecutar_submenu_ordenamiento(paises)
+            
             
         elif opcion == "7":
-            print("\nFuncionalidad: Estadísticas globales.")
+            mostrar_estadisticas(paises)
             
         elif opcion == "8":
             guardar_datos(archivo_datos, paises)
@@ -275,9 +277,66 @@ def filtrar_por_rango_superficie(lista_paises, minimo, maximo):
     return resultados
 
 # =====================================================================
+# FUNCION DE ORDENAMIENTO
+# =====================================================================
+def obtener_nombre(pais): #función para ordenar por nombre
+    return pais["nombre"]
+
+def obtener_poblacion(pais):#función para ordenar por población
+    return pais["poblacion"]
+
+def obtener_superficie(pais):#función para ordenar por superficie con opciones de orden ascendente y descendente
+    return pais['superficie']
+
+def ejecutar_submenu_ordenamiento(paises):
+    print("\n--- SUBMENÚ DE ORDENAMIENTO ---")
+    print("a. Ordenar por Nombre")
+    print("b. Ordenar por Población")
+    print("c. Ordenar por Superficie")
+
+    sub_opcion = input("Elegí una opción de ordenamiento (a, b o c): ").strip().lower()
+
+    if sub_opcion == "a":
+        paises_ordenados = sorted(paises, key=obtener_nombre)
+
+        print("\n--- PAÍSES ORDENADOS POR NOMBRE ---")
+        for pais in paises_ordenados: #recorre la lista y obtiene el valor "nombre" en cada recorrido
+            print(f"{pais['nombre']} | {pais['continente']} | Población: {pais['poblacion']} | Superficie: {pais['superficie']}")
+
+    elif sub_opcion=="b":
+        paises_ordenados=sorted(paises,key=obtener_poblacion) #recorre la lista y obtiene el valor "población" en cada recorrido
+        print("\n--- PAÍSES ORDENADOS POR POBLACIÓN ---")
+        for pais in paises_ordenados:
+            print(f"{pais['nombre']} | {pais['continente']} | Población: {pais['poblacion']} | Superficie: {pais['superficie']}")
+    elif sub_opcion == "c":
+        orden = input(
+            "¿Cómo desea ordenar la superficie?\n"
+            "a. Ascendente\n"
+            "b. Descendente\n"
+            "Opción: "
+        ).strip().lower()
+        
+        if orden == "a":
+            paises_ordenados = sorted(paises, key=obtener_superficie) #recorre la lista y obtiene el valor "superficie" en cada recorrido
+            print("\n--- PAÍSES ORDENADOS POR SUPERFICIE ASCENDENTE ---")
+            
+        elif orden == "b":
+            paises_ordenados = sorted(paises, key=obtener_superficie, reverse=True) #reverse=True es para hacerlo descendente.
+            print("\n--- PAÍSES ORDENADOS POR SUPERFICIE DESCENDENTE ---")
+
+        else:
+            print("Opción inválida.")
+            return
+
+        for pais in paises_ordenados:
+            print(f"{pais['nombre']} | {pais['continente']} | Población: {pais['poblacion']} | Superficie: {pais['superficie']}")
+    else:
+        print("Opción inválida.")
+
+# =====================================================================
 # BLOQUE 5: SUBMENÚ DE FILTROS
 # =====================================================================
-def ejecutar_submenu_filtros(paises):
+def ejecutar_submenu_filtros(paises,continentes):
     print("\n--- SUBMENÚ DE FILTROS ---")
     print("a. Filtrar por Continente")
     print("b. Filtrar por Rango de Población")
@@ -285,25 +344,50 @@ def ejecutar_submenu_filtros(paises):
     sub_opcion = input("Elegí una opción de filtrado (a, b o c): ").strip().lower()
     
     if sub_opcion == "a":
-        continente = input("Ingresá el nombre del continente: ").strip()
-        if continente != "":
-            resultados = filtrar_por_continente(paises, continente)
-            if len(resultados) > 0:
-                print(f"\nPaíses en {continente}:")
-                for p in resultados:
-                    print(f"-> {p['nombre']} (Población: {p['poblacion']})")
-            else:
-                print(f"\nNo se encontraron países en '{continente}'.")
+        sub_a=False
+        while sub_a==False:
+            try:
+                continente_elejido = int(input('''Ingresá la opción correspondiente al contiente: 
+                                1. América del Sur
+                                2. Europa
+                                3. Asia
+                                4. África
+                                5. Oceanía''')) #para disminuir el error en la elección
+                if 1 <= continente_elejido <= len(continentes):
+                    continente = continentes[continente_elejido - 1]
+                    sub_a=True
+                else:
+                    print("Opción inválida, debe estar entre 1 y 5.")
+
+            except ValueError as e:
+                print(f"Error: {e}, ingrese un dato válido")
+        
+        resultados = filtrar_por_continente(paises, continente)
+        if len(resultados) > 0:
+            print(f"\nPaíses en {continente}:")
+            for p in resultados:
+                print(f"-> {p['nombre']} (Población: {p['poblacion']})")
         else:
-            print("El continente no puede estar vacío.")
+                print(f"\nNo se encontraron países en '{continente}'.")
+
             
     elif sub_opcion == "b":
         print("\n-- Rango de Población --")
         min_pob = input("Ingresá la población MÍNIMA: ").strip()
         max_pob = input("Ingresá la población MÁXIMA: ").strip()
-        
+
         if min_pob.isdigit() and max_pob.isdigit():
-            resultados = filtrar_por_rango_poblacion(paises, int(min_pob), int(max_pob))
+
+            if int(min_pob) > int(max_pob):
+                print("La población mínima no puede ser mayor que la máxima.")
+                return
+
+            resultados = filtrar_por_rango_poblacion(
+                paises,
+                int(min_pob),
+                int(max_pob)
+            )
+
             if len(resultados) > 0:
                 print(f"\nPaíses dentro del rango de población ({min_pob} - {max_pob}):")
                 for p in resultados:
@@ -319,9 +403,19 @@ def ejecutar_submenu_filtros(paises):
         max_sup = input("Ingresá la superficie MÁXIMA (km²): ").strip()
         
         if min_sup.isdigit() and max_sup.isdigit():
-            resultados = filtrar_por_rango_superficie(paises, int(min_sup), int(max_sup))
+
+            if int(min_sup) > int(max_sup):
+                print("La superficie mínima no puede ser mayor que la máxima.")
+                return
+
+            resultados = filtrar_por_rango_superficie(
+                paises,
+                int(min_sup),
+                int(max_sup)
+            )
+
             if len(resultados) > 0:
-                print(f"\nPaíses dentro del rango de superficie ({min_sup}km² - {max_sup}km²):")
+                print(f"\nPaíses dentro del rango de superficie ({min_sup} km² - {max_sup} km²):")
                 for p in resultados:
                     print(f"-> {p['nombre']} (Superficie: {p['superficie']} km²)")
             else:
@@ -330,6 +424,52 @@ def ejecutar_submenu_filtros(paises):
             print("Los valores deben ser números enteros.")
     else:
         print("Opción de submenú inválida.")
+# =====================================================================
+# FUNCIONES DE MÉTRICAS
+# =====================================================================
 
+def mostrar_estadisticas(paises):
+    if len(paises) == 0:
+        print("No hay países cargados para calcular estadísticas.")
+        return
+
+    pais_mayor_poblacion = paises[0] #se le asigna el primer registro para poder comparar después.
+    pais_menor_poblacion = paises[0] #se le asigna el primer registro para poder comparar después.
+
+    suma_poblacion = 0
+    suma_superficie = 0
+
+    cantidad_por_continente = {}
+
+    for pais in paises: #se comparan los valores dentro del ciclo for
+        if pais["poblacion"] > pais_mayor_poblacion["poblacion"]: 
+            pais_mayor_poblacion = pais # la variable va a tomar el mayor valor
+
+        if pais["poblacion"] < pais_menor_poblacion["poblacion"]:
+            pais_menor_poblacion = pais # la variable va a tomar el menor valor
+
+        suma_poblacion += pais["poblacion"]
+        suma_superficie += pais["superficie"]
+
+        continente = pais["continente"]
+
+        if continente in cantidad_por_continente:
+            cantidad_por_continente[continente] += 1 #en caso de encontrar el nombre del continente, se suma al valor
+        else:
+            cantidad_por_continente[continente] = 1 #por defecto va a tomar el valor de 1
+
+    promedio_poblacion = suma_poblacion / len(paises)
+    promedio_superficie = suma_superficie / len(paises)
+
+    print("\n--- ESTADÍSTICAS GLOBALES ---")
+    print(f"País con mayor población: {pais_mayor_poblacion['nombre']} ({pais_mayor_poblacion['poblacion']})")
+    print(f"País con menor población: {pais_menor_poblacion['nombre']} ({pais_menor_poblacion['poblacion']})")
+    print(f"Promedio de población: {promedio_poblacion:.2f}")
+    print(f"Promedio de superficie: {promedio_superficie:.2f} km²")
+
+    print("\nCantidad de países por continente:")
+    for continente in cantidad_por_continente:
+        print(f"- {continente}: {cantidad_por_continente[continente]}")
+        
 #Inicia el programa
 programa_principal()
