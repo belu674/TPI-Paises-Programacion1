@@ -81,7 +81,7 @@ def mostrar_menu():
 def programa_principal():
     archivo_datos = "paises.csv"
     paises = cargar_datos(archivo_datos)
-    continentes=["América del Sur","Europa","Asia","África","Oceanía"]
+    continentes=["América del Sur","América del Norte","Europa","Asia","África","Oceanía"]
     
     while True:
         mostrar_menu()
@@ -90,11 +90,11 @@ def programa_principal():
         if opcion == "1":
             print("\n--- LISTADO TOTAL DE PAÍSES ---")
             for p in paises:
-                print(f"País: {p['nombre']:<12} | Continente: {p['continente']:<16} | Población: {p['poblacion']}")
+                print(f"País: {p['nombre']:<12} | Continente: {p['continente']:<16} | Población: {p['poblacion']:<10} | Superficie: {p['superficie']:<10} km² | PBI: {p['pbi']}")
         
         elif opcion == "2":
             #Llamamos a la función de alta pasándole nuestra lista de países
-            agregar_pais(paises)
+            agregar_pais(paises,continentes)
             
         elif opcion == "3":
             #Llamamos a la función de modificación pasándole la lista
@@ -107,9 +107,9 @@ def programa_principal():
         elif opcion == "5":
             #Llamamos a la función encargada de gestionar los filtros
             ejecutar_submenu_filtros(paises,continentes)
+
         elif opcion == "6":
             ejecutar_submenu_ordenamiento(paises)
-            
             
         elif opcion == "7":
             mostrar_estadisticas(paises)
@@ -124,7 +124,7 @@ def programa_principal():
 # =====================================================================
 # BLOQUE 5: FUNCIÓN PARA AGREGAR UN PAÍS (ALTA)
 # =====================================================================
-def agregar_pais(lista_paises):
+def agregar_pais(lista_paises,continentes):
     print("\n--- REGISTRAR NUEVO PAÍS ---")
     
     #Validamos que el nombre no sea vacío
@@ -133,11 +133,20 @@ def agregar_pais(lista_paises):
         print("El nombre no puede estar vacío.")
         nombre = input("Ingresá el nombre del país: ").strip()
         
-    #Validamos que el continente no sea vacío
-    continente = input("Ingresá el continente: ").strip()
-    while continente == "":
-        print("El continente no puede estar vacío.")
-        continente = input("Ingresá el continente: ").strip()
+    #Solicitamos al usuario que elija el continente
+    while True:
+        print("\nSeleccioná el continente:")
+        for i, c in enumerate(continentes, 1):
+            print(f"{i}. {c}")
+        try:
+            opcion = int(input("Opción (1-6): "))
+            if 1 <= opcion <= len(continentes):
+                continente = continentes[opcion - 1]
+                break
+            else:
+                print("Opción inválida. Elige un número del 1 al 6.")
+        except ValueError:
+            print("Entrada no válida. Debes ingresar un número.")
 
     #Validamos que la población sea un número entero mayor a 0 y no vacío
     while True:
@@ -344,21 +353,18 @@ def ejecutar_submenu_filtros(paises,continentes):
     sub_opcion = input("Elegí una opción de filtrado (a, b o c): ").strip().lower()
     
     if sub_opcion == "a":
-        sub_a=False
-        while sub_a==False:
+        while True:
             try:
-                continente_elejido = int(input('''Ingresá la opción correspondiente al contiente: 
-                                1. América del Sur
-                                2. Europa
-                                3. Asia
-                                4. África
-                                5. Oceanía''')) #para disminuir el error en la elección
-                if 1 <= continente_elejido <= len(continentes):
-                    continente = continentes[continente_elejido - 1]
-                    sub_a=True
+                print("Ingresá la opción correspondiente al continente:")
+                for i, c in enumerate(continentes, 1):
+                    print(f"{i}. {c}")
+                
+                continente_elegido = int(input("Opción: "))
+                if 1 <= continente_elegido <= len(continentes):
+                    continente = continentes[continente_elegido - 1]
+                    break # Salimos del bucle si es correcto
                 else:
-                    print("Opción inválida, debe estar entre 1 y 5.")
-
+                    print("Opción inválida, debe estar entre 1 y 6.")
             except ValueError as e:
                 print(f"Error: {e}, ingrese un dato válido")
         
