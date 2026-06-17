@@ -106,8 +106,8 @@ Cantidad de países por continente:
 
 ## 🎬 Video demostración
 
-[Ver video en YouTube](https://youtube.com/...)
+[Ver video en YouTube](https://youtu.be/4B7cgko6jmU)
 
 ## 📄 Documentación
 
-[Ver documentación completa](TPI_Programación I.docx)
+[Ver documentación](TPI_Programación_I.pdf)
