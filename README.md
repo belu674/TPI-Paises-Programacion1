@@ -1,7 +1,5 @@
 # 🌍 Sistema de Gestión de Datos de Países
 
----
-
 ## 📋 Descripción
 
 Trabajo Práctico Integrador de Programación 1.
@@ -21,8 +19,6 @@ El sistema permite gestionar información de países almacenada en un archivo CS
 - Ordenar por población.
 - Ordenar por superficie.
 - Mostrar estadísticas.
-
----
 
 ## ▶️ Instrucciones de uso
 
@@ -58,8 +54,6 @@ Al iniciar el programa, se presenta el siguiente menú:
 
 > ⚠️ Los cambios realizados (altas y modificaciones) **solo se guardan en el archivo** al elegir la opción **8. Salir y guardar**.
 
----
-
 ## 🛠️ Tecnologías utilizadas
 
 - Python 3
@@ -68,11 +62,7 @@ Al iniciar el programa, se presenta el siguiente menú:
 - Diccionarios
 - Funciones
 
----
-
 ## 💡 Ejemplos de entradas y salidas
-
----
 
 ### Opción 3 — Actualizar datos de un país
 
@@ -91,8 +81,6 @@ Ingresá la NUEVA superficie en km² (solo números): 2780400
 Los datos de Argentina fueron actualizados correctamente.
 ```
 
----
-
 ### Opción 7 — Estadísticas globales
 
 ```
@@ -109,14 +97,12 @@ Cantidad de países por continente:
 - África: 1
 ```
 
----
-
 ## 👥 Participación de los integrantes
 
-| Integrante             | Funciones desarrolladas                                                                                                                                                                                                                                                                          |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Belén Molina**       | Creación y carga del archivo CSV (`guardar_datos`, `cargar_datos`), menú principal (`mostrar_menu`, `programa_principal`), alta de país (`agregar_pais`), actualización de país (`actualizar_pais`)                                                                                              |
-| **Facundo Avellaneda** | Búsqueda por nombre (`buscar_pais_por_nombre`), filtros (`ejecutar_submenu_filtros`, `filtrar_por_continente`, `filtrar_por_rango_poblacion`, `filtrar_por_rango_superficie`), ordenamiento (`ejecutar_submenu_ordenamiento`), estadísticas (`mostrar_estadisticas`), documentación del proyecto |
+| Integrante             | Funciones desarrolladas                                                                                                                                                                                                                             |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Belén Molina**       | Creación y carga del archivo CSV (`guardar_datos`, `cargar_datos`), menú principal (`mostrar_menu`, `programa_principal`), alta de país (`agregar_pais`), actualización de país (`actualizar_pais`), Búsqueda por nombre (`buscar_pais_por_nombre`) |
+| **Facundo Avellaneda** | filtros (`ejecutar_submenu_filtros`, `filtrar_por_continente`, `filtrar_por_rango_poblacion`, `filtrar_por_rango_superficie`), ordenamiento (`ejecutar_submenu_ordenamiento`), estadísticas (`mostrar_estadisticas`), documentación del proyecto    |
 
 ## 🎬 Video demostración
 
@@ -124,4 +110,4 @@ Cantidad de países por continente:
 
 ## 📄 Documentación
 
-[Ver documentación completa](TPI_Programación I.pdf)
+[Ver documentación completa](TPI_Programación I.docx)
